@@ -55,6 +55,8 @@ resource "aws_iam_role_policy_attachment" "attached" {
 }
 
 resource "aws_iam_instance_profile" "main" {
+  count = var.create_iam_role || var.attached_iam_role_name != "" ? 1 : 0
+
   name = var.instance_name
   role = var.create_iam_role ? aws_iam_role.main[0].name : var.attached_iam_role_name
 }
