@@ -72,6 +72,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "volume_tags" {
+  type        = map(string)
+  description = "Map of tags to apply to ebs volumes"
+  default     = {}
+}
+
 variable "root_block_device" {
   type        = map(string)
   description = "Root block device configuration. See https://www.terraform.io/docs/providers/aws/r/instance.html#block-devices"
