@@ -9,6 +9,35 @@
 * - Create/Attach an EC2 KeyPair (Private Key is stored in SSM)
 * - AutoRecovery Cloudwatch Alarms with SNS support
 * - Tags
+*
+* ## Additional EBS Volumes
+* To attach additional EBS volumes the `ebs_block_devices` variable is used. It uses a custom object syntax which cannot be enforced by object() due to it having optional parameters.
+*
+* The following parameters are supported:
+* - device_name (Required)
+* - type (Optional)
+* - size (Optional)
+* - encrypted (Optional)
+* - iops (Optional)
+* - snapshot_id (Optional)
+* - kms_key_id (Optional)
+*
+* ```hcl
+* ebs_block_devices = [
+*   {
+*      device_name = "/dev/sdf"
+*      type        = "gp2"
+*      size        = 5
+*      encrypted   = true
+*    },
+*    {
+*      device_name = "/dev/sdg"
+*      type        = "gp2"
+*      size        = 10
+*      encrypted   = true
+*    }
+* ]
+* ```
 */
 
 resource "aws_instance" "main" {
@@ -17,7 +46,7 @@ resource "aws_instance" "main" {
 
   associate_public_ip_address = var.create_eip || var.eip_allocation_id != "" ? true : var.associate_public_ip_address
   disable_api_termination     = var.enable_termination_protection
-  iam_instance_profile        = aws_iam_instance_profile.main.name
+  iam_instance_profile        = var.create_iam_role || var.attached_iam_role_name != "" ? aws_iam_instance_profile.main[0].name : ""
   key_name                    = var.create_keypair ? aws_key_pair.keypair_public[0].key_name : var.keypair_name
   monitoring                  = var.enable_detailed_monitoring
   private_ip                  = var.private_ip
@@ -26,7 +55,7 @@ resource "aws_instance" "main" {
   vpc_security_group_ids      = var.create_security_group ? concat([aws_security_group.main[0].id], var.additional_security_group_ids) : var.additional_security_group_ids
 
   tags        = merge({ Name = var.instance_name }, var.tags)
-  volume_tags = merge({ Name = var.instance_name }, var.tags)
+  volume_tags = var.volume_tags != {} ? var.volume_tags : var.tags
 
   dynamic "root_block_device" {
     for_each = var.root_block_device != {} ? [1] : []
@@ -40,20 +69,6 @@ resource "aws_instance" "main" {
     }
   }
 
-  dynamic "ebs_block_device" {
-    for_each = var.ebs_block_devices
-    content {
-      device_name           = ebs_block_device.value.device_name
-      delete_on_termination = lookup(ebs_block_device.value, "delete_on_termination", null)
-      encrypted             = lookup(ebs_block_device.value, "encrypted", true)
-      iops                  = lookup(ebs_block_device.value, "iops", null)
-      kms_key_id            = lookup(ebs_block_device.value, "kms_key_id", null)
-      snapshot_id           = lookup(ebs_block_device.value, "snapshot_id", null)
-      volume_size           = lookup(ebs_block_device.value, "volume_size", null)
-      volume_type           = lookup(ebs_block_device.value, "volume_type", null)
-    }
-  }
-
   dynamic "network_interface" {
     for_each = var.network_interfaces
     content {
@@ -62,6 +77,27 @@ resource "aws_instance" "main" {
       delete_on_termination = lookup(network_interface.value, "delete_on_termination", false)
     }
   }
+}
+
+resource "aws_ebs_volume" "main" {
+  count = length(var.ebs_block_devices)
+
+  availability_zone = data.aws_subnet.current.availability_zone
+  encrypted         = lookup(var.ebs_block_devices[count.index], "encrypted", true)
+  iops              = lookup(var.ebs_block_devices[count.index], "iops", null)
+  size              = lookup(var.ebs_block_devices[count.index], "size", null)
+  snapshot_id       = lookup(var.ebs_block_devices[count.index], "snapshot_id", null)
+  type              = lookup(var.ebs_block_devices[count.index], "type", null)
+  kms_key_id        = lookup(var.ebs_block_devices[count.index], "kms_key_id", null)
+  tags              = var.volume_tags != {} ? var.volume_tags : var.tags
+}
+
+resource "aws_volume_attachment" "main" {
+  count = length(var.ebs_block_devices)
+
+  device_name = var.ebs_block_devices[count.index]["device_name"]
+  instance_id = aws_instance.main.id
+  volume_id   = aws_ebs_volume.main[count.index].id
 }
 
 resource "aws_eip" "main" {

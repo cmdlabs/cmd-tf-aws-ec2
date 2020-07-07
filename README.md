@@ -9,6 +9,35 @@ This module is used to build pet EC2 instances. It currently supports the follow
 - AutoRecovery Cloudwatch Alarms with SNS support
 - Tags
 
+## Additional EBS Volumes  
+To attach additional EBS volumes the `ebs_block_devices` variable is used. It uses a custom object syntax which cannot be enforced by object() due to it having optional parameters.
+
+The following parameters are supported:
+- device\_name (Required)
+- type (Optional)
+- size (Optional)
+- encrypted (Optional)
+- iops (Optional)
+- snapshot\_id (Optional)
+- kms\_key\_id (Optional)
+
+```hcl
+ebs_block_devices = [
+  {
+     device_name = "/dev/sdf"
+     type        = "gp2"
+     size        = 5
+     encrypted   = true
+   },
+   {
+     device_name = "/dev/sdg"
+     type        = "gp2"
+     size        = 10
+     encrypted   = true
+   }
+]
+```
+
 ## Requirements
 
 The following requirements are needed by this module:
@@ -261,6 +290,14 @@ Description: Userdata for the EC2 instance to run on startup
 Type: `string`
 
 Default: `""`
+
+### volume\_tags
+
+Description: Map of tags to apply to ebs volumes
+
+Type: `map(string)`
+
+Default: `{}`
 
 ## Outputs
 

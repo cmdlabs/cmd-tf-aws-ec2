@@ -85,6 +85,10 @@ module "ec2_without_sg_creation" {
   subnet_id                     = module.vpc.private_tier_subnet_ids[0]
   create_security_group         = false
   additional_security_group_ids = [aws_security_group.test_sg.id]
+
+  volume_tags = {
+    VolTag = "Test"
+  }
 }
 
 # Test3 - EC2 instance with iam role creation. Tests inline policy as well as existing policy attachment
@@ -167,8 +171,14 @@ module "ec2_without_iam_creation" {
   ebs_block_devices = [
     {
       device_name = "/dev/sdf"
-      volume_type = "gp2"
-      volume_size = 5
+      type        = "gp2"
+      size        = 5
+      encrypted   = true
+    },
+    {
+      device_name = "/dev/sdg"
+      type        = "gp2"
+      size        = 10
       encrypted   = true
     }
   ]
