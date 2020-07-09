@@ -78,6 +78,12 @@ variable "volume_tags" {
   default     = {}
 }
 
+variable "instance_tags" {
+  type        = map(string)
+  description = "Map of tags to apply to the ec2 instance"
+  default     = {}
+}
+
 variable "root_block_device" {
   type        = map(string)
   description = "Root block device configuration. See https://www.terraform.io/docs/providers/aws/r/instance.html#block-devices"
