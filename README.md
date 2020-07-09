@@ -38,6 +38,13 @@ ebs_block_devices = [
 ]
 ```
 
+## Tags  
+There are 3 ways to manage tags with this module. This is primarily to allow the different use cases of AWS Backup.
+
+`tags` is used when you dont need to set specific backup tags on the instance/ebs volumes. It applies to all resources created by the module.
+`volume_tags` is use to override the tags set on ebs volumes. Useful if you are using AWS Backup with EBS snapshots
+`instance_tags` is used to override the tags set on the ec2 instance. Useful if you are using AWS Backup with EC2 AMI backups.
+
 ## Requirements
 
 The following requirements are needed by this module:
@@ -234,6 +241,14 @@ Description: List of maps of ingress aws\_security\_group\_rule(excluding type) 
 Type: `any`
 
 Default: `[]`
+
+### instance\_tags
+
+Description: Map of tags to apply to the ec2 instance
+
+Type: `map(string)`
+
+Default: `{}`
 
 ### instance\_type
 

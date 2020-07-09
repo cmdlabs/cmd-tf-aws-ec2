@@ -89,6 +89,10 @@ module "ec2_without_sg_creation" {
   volume_tags = {
     VolTag = "Test"
   }
+
+  instance_tags = {
+    InstTag = "Test"
+  }
 }
 
 # Test3 - EC2 instance with iam role creation. Tests inline policy as well as existing policy attachment

@@ -38,6 +38,14 @@
 *    }
 * ]
 * ```
+*
+* ## Tags
+* There are 3 ways to manage tags with this module. This is primarily to allow the different use cases of AWS Backup.
+*
+* `tags` is used when you dont need to set specific backup tags on the instance/ebs volumes. It applies to all resources created by the module.
+* `volume_tags` is use to override the tags set on ebs volumes. Useful if you are using AWS Backup with EBS snapshots
+* `instance_tags` is used to override the tags set on the ec2 instance. Useful if you are using AWS Backup with EC2 AMI backups.
+*
 */
 
 resource "aws_instance" "main" {
@@ -54,7 +62,7 @@ resource "aws_instance" "main" {
   user_data                   = var.user_data
   vpc_security_group_ids      = var.create_security_group ? concat([aws_security_group.main[0].id], var.additional_security_group_ids) : var.additional_security_group_ids
 
-  tags        = merge({ Name = var.instance_name }, var.tags)
+  tags        = merge({ Name = var.instance_name }, var.instance_tags != {} ? var.instance_tags : var.tags)
   volume_tags = var.volume_tags != {} ? var.volume_tags : var.tags
 
   dynamic "root_block_device" {
