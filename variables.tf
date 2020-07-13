@@ -178,3 +178,9 @@ variable "create_keypair" {
   description = "Create an EC2 keypair for the instance. The private key will be uploaded to SSM Parameter Store as an SecureString. Be aware that using this option will result in the private key being stored in the Terraform statefile which may not be appropriate in all organisations."
   default     = false
 }
+
+variable "ebs_optimized" {
+  type        = bool
+  description = "Enable EBS Optimization"
+  default     = false
+}

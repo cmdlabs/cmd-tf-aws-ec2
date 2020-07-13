@@ -165,6 +165,14 @@ Type: `list(map(string))`
 
 Default: `[]`
 
+### ebs\_optimized
+
+Description: Enable EBS Optimization
+
+Type: `bool`
+
+Default: `false`
+
 ### egress\_security\_group\_rules
 
 Description: List of maps of egress aws\_security\_group\_rules(excluding type) to attach to the created security group. See https://www.terraform.io/docs/providers/aws/r/security_group_rule.html
