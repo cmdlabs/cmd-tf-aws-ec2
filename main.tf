@@ -54,6 +54,7 @@ resource "aws_instance" "main" {
 
   associate_public_ip_address = var.create_eip || var.eip_allocation_id != "" ? true : var.associate_public_ip_address
   disable_api_termination     = var.enable_termination_protection
+  ebs_optimized               = var.ebs_optimized
   iam_instance_profile        = var.create_iam_role || var.attached_iam_role_name != "" ? aws_iam_instance_profile.main[0].name : ""
   key_name                    = var.create_keypair ? aws_key_pair.keypair_public[0].key_name : var.keypair_name
   monitoring                  = var.enable_detailed_monitoring
