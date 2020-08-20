@@ -32,6 +32,12 @@ resource "aws_iam_role" "ci_test" {
 EOF
 }
 
+resource "aws_iam_instance_profile" "ci_test" {
+  name = "ec2-ci-test"
+  role = aws_iam_role.ci_test.name
+}
+
+
 resource "aws_sns_topic" "ci_test" {
   name = "ec2-ci-test"
 }
@@ -179,6 +185,7 @@ module "ec2_without_iam_creation" {
   subnet_id     = module.vpc.private_tier_subnet_ids[0]
 
   attached_iam_role_name = aws_iam_role.ci_test.name
+  create_instance_profile = false
 
   cloudwatch_sns_topic_arn = aws_sns_topic.ci_test.arn
 

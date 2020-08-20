@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `var.enable_source_dest_check` to allow disabling the ec2 hypervisor from checking traffic is to this instance
+- `var.create_instance_profile` to allow disabling the creation of an instance profile, if this is false you must ensure the role you are using already has an ec2 instance profile.
 
 ### Fixed
 - You can now rename an instance by just changing `var.instance_name`

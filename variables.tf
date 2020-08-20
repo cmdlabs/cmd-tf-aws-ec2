@@ -190,3 +190,9 @@ variable "enable_source_dest_check" {
   description = "Enable Source/Destination check"
   default     = true
 }
+
+variable "create_instance_profile" {
+  type        = bool
+  description = "Create an IAM instance profile"
+  default     = true
+}
