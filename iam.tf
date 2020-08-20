@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "policy" {
 resource "aws_iam_role" "main" {
   count = var.create_iam_role ? 1 : 0
 
-  name               = "${var.instance_name}-main"
+  name               = var.custom_iam_role_name != "" ? var.custom_iam_role_name : var.instance_name
   assume_role_policy = data.aws_iam_policy_document.assume[0].json
 
   tags = var.tags
@@ -57,6 +57,6 @@ resource "aws_iam_role_policy_attachment" "attached" {
 resource "aws_iam_instance_profile" "main" {
   count = var.create_iam_role || (var.attached_iam_role_name != "" && var.create_instance_profile) ? 1 : 0
 
-  name = var.instance_name
+  name = var.custom_instance_profile_name != "" ? var.custom_instance_profile_name : var.instance_name
   role = var.create_iam_role ? aws_iam_role.main[0].name : var.attached_iam_role_name
 }

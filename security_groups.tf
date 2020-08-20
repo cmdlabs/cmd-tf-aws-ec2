@@ -1,7 +1,7 @@
 resource "aws_security_group" "main" {
   count = var.create_security_group ? 1 : 0
 
-  name   = "${var.instance_name}-main"
+  name   = var.custom_security_group_name != "" ? var.custom_security_group_name : var.instance_name
   vpc_id = var.vpc_id
 
   tags = var.tags
