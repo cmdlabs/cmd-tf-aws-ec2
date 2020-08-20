@@ -70,7 +70,15 @@ module "ec2_with_sg_creation" {
   ]
 
   tags = {
-    Foo = "Bar"
+    Tag = "Tag"
+  }
+
+  instance_tags = {
+    InstanceTag = "InstanceTag"
+  }
+
+  volume_tags = {
+    VolumeTag = "VolumeTag"
   }
 }
 
