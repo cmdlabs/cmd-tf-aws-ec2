@@ -137,6 +137,8 @@ module "ec2_with_iam_creation_attachment" {
   vpc_id        = module.vpc.vpc_id
   subnet_id     = module.vpc.private_tier_subnet_ids[0]
 
+  enable_source_dest_check = false
+
   create_iam_role       = true
   iam_policy_attachment = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
 }

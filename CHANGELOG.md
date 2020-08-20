@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking
 - The tag hierarchy is now merged rather than replaced. This means you no longer need to define the same tag multiple times for it to be used on all resources.
 
+### Added
+- `var.enable_source_dest_check` to allow disabling the ec2 hypervisor from checking traffic is to this instance
+
 ### Fixed
 - You can now rename an instance by just changing `var.instance_name`
 

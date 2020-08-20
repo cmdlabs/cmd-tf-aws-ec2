@@ -63,6 +63,7 @@ resource "aws_instance" "main" {
   private_ip                  = var.private_ip
   subnet_id                   = var.subnet_id
   user_data                   = var.user_data
+  source_dest_check           = var.enable_source_dest_check
   vpc_security_group_ids      = var.create_security_group ? concat([aws_security_group.main[0].id], var.additional_security_group_ids) : var.additional_security_group_ids
 
   tags = merge(

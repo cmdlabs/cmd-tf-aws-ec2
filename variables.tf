@@ -184,3 +184,9 @@ variable "ebs_optimized" {
   description = "Enable EBS Optimization"
   default     = false
 }
+
+variable "enable_source_dest_check" {
+  type        = bool
+  description = "Enable Source/Destination check"
+  default     = true
+}
