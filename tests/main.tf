@@ -32,6 +32,12 @@ resource "aws_iam_role" "ci_test" {
 EOF
 }
 
+resource "aws_iam_instance_profile" "ci_test" {
+  name = "ec2-ci-test"
+  role = aws_iam_role.ci_test.name
+}
+
+
 resource "aws_sns_topic" "ci_test" {
   name = "ec2-ci-test"
 }
@@ -70,7 +76,15 @@ module "ec2_with_sg_creation" {
   ]
 
   tags = {
-    Foo = "Bar"
+    Tag = "Tag"
+  }
+
+  instance_tags = {
+    InstanceTag = "InstanceTag"
+  }
+
+  volume_tags = {
+    VolumeTag = "VolumeTag"
   }
 }
 
@@ -129,6 +143,8 @@ module "ec2_with_iam_creation_attachment" {
   vpc_id        = module.vpc.vpc_id
   subnet_id     = module.vpc.private_tier_subnet_ids[0]
 
+  enable_source_dest_check = false
+
   create_iam_role       = true
   iam_policy_attachment = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
 }
@@ -168,7 +184,8 @@ module "ec2_without_iam_creation" {
   vpc_id        = module.vpc.vpc_id
   subnet_id     = module.vpc.private_tier_subnet_ids[0]
 
-  attached_iam_role_name = aws_iam_role.ci_test.name
+  attached_iam_role_name  = aws_iam_role.ci_test.name
+  create_instance_profile = false
 
   cloudwatch_sns_topic_arn = aws_sns_topic.ci_test.arn
 
@@ -213,6 +230,42 @@ module "ec2_with_eip" {
       to_port     = 80
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+}
+
+# Test8 - Custom resource names
+module "ec2_with_custom_names" {
+  source = "../"
+
+  instance_name = "ec2-ci-test-with-custom-names"
+  ami_id        = "ami-088ff0e3bde7b3fdf"
+  instance_type = "t3.micro"
+  vpc_id        = module.vpc.vpc_id
+  subnet_id     = module.vpc.public_tier_subnet_ids[0]
+
+  create_iam_role              = true
+  custom_iam_role_name         = "ec2-ci-test-custom-iam-role-name"
+  custom_instance_profile_name = "ec2-ci-test-custom-instance-profile-name"
+  custom_security_group_name   = "ec2-ci-test-custom-security-group-name"
+
+  ingress_security_group_rules = [
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  iam_policy = [
+    {
+      actions   = ["s3:ListBucket"]
+      resources = ["*"]
+    },
+    {
+      actions   = ["s3:HeadBucket"]
+      resources = ["*"]
     }
   ]
 }

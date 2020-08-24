@@ -40,12 +40,14 @@
 * ```
 *
 * ## Tags
-* There are 3 ways to manage tags with this module. This is primarily to allow the different use cases of AWS Backup.
+* There are 3 ways to apply tags with this module. This is primarily to allow the different use cases of AWS Backup.
+*
+* The tags merge in the following order. The right most value is what is used when a duplicate key is defined at multiple levels
+* `tags <- instance/volume_tags <- instance_name`
 *
 * `tags` is used when you dont need to set specific backup tags on the instance/ebs volumes. It applies to all resources created by the module.
-* `volume_tags` is use to override the tags set on ebs volumes. Useful if you are using AWS Backup with EBS snapshots
-* `instance_tags` is used to override the tags set on the ec2 instance. Useful if you are using AWS Backup with EC2 AMI backups.
-*
+* `volume_tags` is use to apply specific tags only to the ebs volumes. Useful if you are using AWS Backup with EBS snapshots
+* `instance_tags` is used to apply specific tags only to the ec2 instance. Useful if you are using AWS Backup with EC2 AMI backups.
 */
 
 resource "aws_instance" "main" {
@@ -55,16 +57,26 @@ resource "aws_instance" "main" {
   associate_public_ip_address = var.create_eip || var.eip_allocation_id != "" ? true : var.associate_public_ip_address
   disable_api_termination     = var.enable_termination_protection
   ebs_optimized               = var.ebs_optimized
-  iam_instance_profile        = var.create_iam_role || var.attached_iam_role_name != "" ? aws_iam_instance_profile.main[0].name : ""
+  iam_instance_profile        = var.create_iam_role || (var.attached_iam_role_name != "" && var.create_instance_profile) ? aws_iam_instance_profile.main[0].name : var.attached_iam_role_name != "" ? var.attached_iam_role_name : ""
   key_name                    = var.create_keypair ? aws_key_pair.keypair_public[0].key_name : var.keypair_name
   monitoring                  = var.enable_detailed_monitoring
   private_ip                  = var.private_ip
   subnet_id                   = var.subnet_id
   user_data                   = var.user_data
+  source_dest_check           = var.enable_source_dest_check
   vpc_security_group_ids      = var.create_security_group ? concat([aws_security_group.main[0].id], var.additional_security_group_ids) : var.additional_security_group_ids
 
-  tags        = merge({ Name = var.instance_name }, var.instance_tags != {} ? var.instance_tags : var.tags)
-  volume_tags = var.volume_tags != {} ? var.volume_tags : var.tags
+  tags = merge(
+    var.tags,
+    var.instance_tags,
+    { Name = var.instance_name }
+  )
+
+  volume_tags = merge(
+    var.tags,
+    var.volume_tags,
+    { Name = var.instance_name }
+  )
 
   dynamic "root_block_device" {
     for_each = var.root_block_device != {} ? [1] : []
@@ -98,7 +110,12 @@ resource "aws_ebs_volume" "main" {
   snapshot_id       = lookup(var.ebs_block_devices[count.index], "snapshot_id", null)
   type              = lookup(var.ebs_block_devices[count.index], "type", null)
   kms_key_id        = lookup(var.ebs_block_devices[count.index], "kms_key_id", null)
-  tags              = var.volume_tags != {} ? var.volume_tags : var.tags
+
+  tags = merge(
+    var.tags,
+    var.volume_tags,
+    { Name = var.instance_name }
+  )
 }
 
 resource "aws_volume_attachment" "main" {
@@ -115,7 +132,7 @@ resource "aws_eip" "main" {
   vpc      = true
   instance = aws_instance.main.id
 
-  tags = merge({ Name = var.instance_name }, var.tags)
+  tags = merge(var.tags, { Name = var.instance_name })
 }
 
 resource "aws_eip_association" "main" {
