@@ -317,6 +317,14 @@ Type: `string`
 
 Default: `""`
 
+### metadata\_options
+
+Description: Metadata Options. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#metadata-options
+
+Type: `map(string)`
+
+Default: `{}`
+
 ### network\_interfaces
 
 Description: Custom network interface configuration. See https://www.terraform.io/docs/providers/aws/r/instance.html#network-interfaces

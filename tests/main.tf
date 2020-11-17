@@ -86,6 +86,10 @@ module "ec2_with_sg_creation" {
   volume_tags = {
     VolumeTag = "VolumeTag"
   }
+
+  metadata_options = {
+    http_put_response_hop_limit = 3
+  }
 }
 
 # Test2 - EC2 instance with an externally managed security group
