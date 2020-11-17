@@ -90,6 +90,12 @@ variable "root_block_device" {
   default     = {}
 }
 
+variable "metadata_options" {
+  type        = map(string)
+  description = "Metadata Options. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#metadata-options"
+  default     = {}
+}
+
 variable "ebs_block_devices" {
   type        = list(map(string))
   description = "Additional EBS block device configuration. See https://www.terraform.io/docs/providers/aws/r/instance.html#block-devices"

@@ -98,6 +98,15 @@ resource "aws_instance" "main" {
       delete_on_termination = lookup(network_interface.value, "delete_on_termination", false)
     }
   }
+
+  dynamic "metadata_options" {
+    for_each = var.metadata_options
+    content {
+      http_endpoint               = lookup(metadata_options, "http_endpoint", "enabled")
+      http_tokens                 = lookup(metadata_options, "http_tokens", "optional")
+      http_put_response_hop_limit = lookup(metadata_options, "http_put_response_hop_limit", 1)
+    }
+  }
 }
 
 resource "aws_ebs_volume" "main" {
