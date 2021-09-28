@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] 2021-09-21
+### Changed
+- `var.volume_tags` behaviour in underlying resources. At instance level, tags are now applied to `root_block_device` directly (rather than `aws_instance --> volume_tags`). This was to resolve behavioural issues of applying tags across multiple block devices, including root devices and secondary, such as when using provider `default_tags`. (See [here](https://github.com/hashicorp/terraform-provider-aws/issues/19188))
+- Uplift required AWS provider version to *>= 3.24.0* to support above change.
+
 ## [0.6.0] 2020-11-17
 ### Added
 - `var.metadata_options` to control IMDS configuration. Useful if you need to access the metadata endpoint from inside a docker container.
