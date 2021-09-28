@@ -45,7 +45,9 @@ The tags merge in the following order. The right most value is what is used when
 `tags <- instance/volume_tags <- instance_name`
 
 `tags` is used when you dont need to set specific backup tags on the instance/ebs volumes. It applies to all resources created by the module.
+
 `volume_tags` is use to apply specific tags only to the ebs volumes. Useful if you are using AWS Backup with EBS snapshots
+
 `instance_tags` is used to apply specific tags only to the ec2 instance. Useful if you are using AWS Backup with EC2 AMI backups.
 
 ## Requirements
@@ -54,13 +56,13 @@ The following requirements are needed by this module:
 
 - terraform (>= 0.12.6)
 
-- aws (>= 2.68.0)
+- aws (>= 3.24.0)
 
 ## Providers
 
 The following providers are used by this module:
 
-- aws (>= 2.68.0)
+- aws (>= 3.24.0)
 
 - tls
 

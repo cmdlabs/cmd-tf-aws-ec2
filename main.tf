@@ -72,12 +72,6 @@ resource "aws_instance" "main" {
     { Name = var.instance_name }
   )
 
-  volume_tags = merge(
-    var.tags,
-    var.volume_tags,
-    { Name = var.instance_name }
-  )
-
   dynamic "root_block_device" {
     for_each = var.root_block_device != {} ? [1] : []
     content {
@@ -87,6 +81,11 @@ resource "aws_instance" "main" {
       kms_key_id            = lookup(var.root_block_device, "kms_key_id", null)
       volume_size           = lookup(var.root_block_device, "volume_size", null)
       volume_type           = lookup(var.root_block_device, "volume_type", null)
+      tags = merge(
+        var.tags,
+        var.volume_tags,
+        { Name = var.instance_name }
+      )
     }
   }
 
