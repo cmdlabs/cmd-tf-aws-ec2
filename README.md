@@ -54,17 +54,17 @@ The tags merge in the following order. The right most value is what is used when
 
 The following requirements are needed by this module:
 
-- terraform (>= 0.12.6)
+- terraform (>= 0.12.31)
 
-- aws (>= 3.24.0)
+- aws (~> 3.75.0)
 
 ## Providers
 
 The following providers are used by this module:
 
-- aws (>= 3.24.0)
+- aws (~> 3.75.0)
 
-- tls
+- tls (~> 3.4.0)
 
 ## Required Inputs
 

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] 2022-06-10
+### Changed
+- updated cmdlabs/terraform-utils to 8.4.0 (TF 0.14.6)
+- updated flemay/envvars to 0.0.8
+- updated aws provider minimum version to 3.75.0
+
 ## [0.7.0] 2021-09-21
 ### Changed
 - `var.volume_tags` behaviour in underlying resources. At instance level, tags are now applied to `root_block_device` directly (rather than `aws_instance --> volume_tags`). This was to resolve behavioural issues of applying tags across multiple block devices, including root devices and secondary, such as when using provider `default_tags`. (See [here](https://github.com/hashicorp/terraform-provider-aws/issues/19188))

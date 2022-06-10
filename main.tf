@@ -78,6 +78,7 @@ resource "aws_instance" "main" {
       delete_on_termination = lookup(var.root_block_device, "delete_on_termination", null)
       encrypted             = lookup(var.root_block_device, "encrypted", true)
       iops                  = lookup(var.root_block_device, "iops", null)
+      throughput            = lookup(var.root_block_device, "throughput", null)
       kms_key_id            = lookup(var.root_block_device, "kms_key_id", null)
       volume_size           = lookup(var.root_block_device, "volume_size", null)
       volume_type           = lookup(var.root_block_device, "volume_type", null)
@@ -114,6 +115,7 @@ resource "aws_ebs_volume" "main" {
   availability_zone = data.aws_subnet.current.availability_zone
   encrypted         = lookup(var.ebs_block_devices[count.index], "encrypted", true)
   iops              = lookup(var.ebs_block_devices[count.index], "iops", null)
+  throughput        = lookup(var.root_block_device, "throughput", null)
   size              = lookup(var.ebs_block_devices[count.index], "size", null)
   snapshot_id       = lookup(var.ebs_block_devices[count.index], "snapshot_id", null)
   type              = lookup(var.ebs_block_devices[count.index], "type", null)
