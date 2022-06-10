@@ -1,6 +1,6 @@
 # Test Dependencies
 module "vpc" {
-  source = "github.com/cmdlabs/cmd-tf-aws-vpc?ref=0.9.0"
+  source = "github.com/cmdlabs/cmd-tf-aws-vpc?ref=0.12.0"
 
   vpc_name                  = "ec2-ci-test"
   vpc_cidr_block            = "10.0.0.0/16"
