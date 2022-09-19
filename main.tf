@@ -60,7 +60,7 @@ resource "aws_instance" "main" {
   iam_instance_profile        = var.create_iam_role || (var.attached_iam_role_name != "" && var.create_instance_profile) ? aws_iam_instance_profile.main[0].name : var.attached_iam_role_name != "" ? var.attached_iam_role_name : ""
   key_name                    = var.create_keypair ? aws_key_pair.keypair_public[0].key_name : var.keypair_name
   monitoring                  = var.enable_detailed_monitoring
-  private_ip                  = var.private_ip
+  private_ip                  = var.private_ip == "" ? null : var.private_ip
   subnet_id                   = var.subnet_id
   user_data                   = var.user_data
   source_dest_check           = var.enable_source_dest_check
