@@ -25,13 +25,13 @@ The following parameters are supported:
 ebs_block_devices = [
   {
      device_name = "/dev/sdf"
-     type        = "gp2"
+     type        = "gp3"
      size        = 5
      encrypted   = true
    },
    {
      device_name = "/dev/sdg"
-     type        = "gp2"
+     type        = "gp3"
      size        = 10
      encrypted   = true
    }
@@ -54,17 +54,17 @@ The tags merge in the following order. The right most value is what is used when
 
 The following requirements are needed by this module:
 
-- terraform (>= 0.12.31)
+- terraform (>= 0.14.6)
 
-- aws (~> 3.75.0)
+- aws (>= 3.75.0)
 
 ## Providers
 
 The following providers are used by this module:
 
-- aws (~> 3.75.0)
+- aws (>= 3.75.0)
 
-- tls (~> 3.4.0)
+- tls (>= 3.4.0)
 
 ## Required Inputs
 
