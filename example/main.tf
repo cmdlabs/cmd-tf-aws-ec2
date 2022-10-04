@@ -1,5 +1,5 @@
 module "ec2_instance" {
-  source = "github.com/cmdlabs/cmd-tf-aws-ec2?ref=0.1.0"
+  source = "github.com/cmdlabs/cmd-tf-aws-ec2?ref=0.8.2"
 
   instance_name = "instance-1"
   ami_id        = "ami-088ff0e3bde7b3fdf"
@@ -8,7 +8,7 @@ module "ec2_instance" {
   subnet_id     = "subnet-0d375f7f06d795235"
 
   root_block_device = {
-    volume_type = "gp2"
+    volume_type = "gp3"
     volume_size = 10
     encrypted   = true
   }
@@ -16,7 +16,7 @@ module "ec2_instance" {
   ebs_block_devices = [
     {
       device_name = "/dev/sdf"
-      volume_type = "gp2"
+      volume_type = "gp3"
       volume_size = 5
       encrypted   = true
     }
