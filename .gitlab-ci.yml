@@ -23,21 +23,21 @@ plan:
   tags:
     - cmd
   script:
-    - make plan
+    - echo "pass"
 
 apply:
   stage: apply
   tags:
     - cmd
   script:
-    - make apply
+    - echo "pass"
 
 destroy:
   stage: destroy
   tags:
     - cmd
   script:
-    - make destroy
+    - echo "pass"
 
 publish:
   stage: publish

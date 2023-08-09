@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [0.9.2] 2023-08-09
+### Fixed
+- updated cmdlabs/terraform-utils to 11.0.6 (TF 1.3.9)
+- updated aws provider minimum version to 3.76.1
+
+## [0.9.1] 2023-08-09
+### Fixed
+- updated cmdlabs/terraform-utils to 11.0.4 (TF 1.3.9)
+
+## [0.9.0] 2023-05-01
+### Fixed
+- updated cmdlabs/terraform-utils to 11.0.1 (TF 1.3.9)
 
 ## [0.8.5] 2023-01-09
 ### Fixed

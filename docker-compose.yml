@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   terraform-utils:
-    image: cmdlabs/terraform-utils:8.4.0
+    image: cmdlabs/terraform-utils:11.0.6
     env_file: .env
     entrypoint: ""
     environment:
@@ -19,12 +19,3 @@ services:
     volumes:
       - .:/work
 
-  aws:
-    image: cmdlabs/aws-utils:1.0.2
-    env_file: .env
-    entrypoint: []
-    volumes:
-      - .:/work
-      - ~/.aws:/root/.aws
-      - ~/.ssh:/root/.ssh
-    working_dir: /work

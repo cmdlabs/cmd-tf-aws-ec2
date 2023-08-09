@@ -1,4 +1,4 @@
-RELEASE_VERSION = 0.8.5
+RELEASE_VERSION = 0.9.2
 
 ifdef CI
 	PROFILE_REQUIRED=profile
@@ -17,19 +17,19 @@ formatCheck: .env
 PHONY: formatCheck
 
 init: .env $(PROFILE_REQUIRED)
-	docker-compose run --rm terraform-utils terraform init tests
+	docker-compose run --rm terraform-utils sh -c 'cd $(SUBFOLDER); terraform init 
 PHONY: init
 
 plan: .env $(PROFILE_REQUIRED) init
-	docker-compose run --rm terraform-utils terraform plan tests
+	docker-compose run --rm terraform-utils sh -c 'cd $(SUBFOLDER); terraform plan
 PHONY: plan
 
 apply: .env $(PROFILE_REQUIRED) init
-	docker-compose run --rm terraform-utils terraform apply -auto-approve tests
+	docker-compose run --rm terraform-utils sh -c 'cd $(SUBFOLDER); terraform apply -auto-approve
 PHONY: apply
 
 destroy: .env $(PROFILE_REQUIRED) init
-	docker-compose run --rm terraform-utils terraform destroy -auto-approve tests
+	docker-compose run --rm terraform-utils sh -c 'cd $(SUBFOLDER); terraform destroy -auto-approve
 PHONY: destroy
 
 tag:
@@ -49,10 +49,10 @@ PHONY: publish
 
 profile: .env
 	docker-compose run --rm envvars ensure --tags profile
-	docker-compose run --rm aws sh -c 'aws configure set credential_source Ec2InstanceMetadata --profile $${AWS_PROFILE_NAME}'
-	docker-compose run --rm aws sh -c 'aws configure set role_arn arn:aws:iam::$${AWS_ACCOUNT_ID}:role/$${AWS_ROLE_NAME} --profile $${AWS_PROFILE_NAME}'
-	docker-compose run --rm aws aws configure set credential_source Ec2InstanceMetadata --profile cmdlabtf-tfbackend
-	docker-compose run --rm aws aws configure set role_arn arn:aws:iam::471871437096:role/gitlab_runner --profile cmdlabtf-tfbackend
+#	docker-compose run --rm terraform-utils ash -c 'aws configure set credential_source Ec2InstanceMetadata --profile $${AWS_PROFILE_NAME}'
+#	docker-compose run --rm terraform-utils ash -c 'aws configure set role_arn arn:aws:iam::$${AWS_ACCOUNT_ID}:role/$${AWS_ROLE_NAME} --profile $${AWS_PROFILE_NAME}'
+	docker-compose run --rm terraform-utils 'aws configure set credential_source Ec2InstanceMetadata --profile cmdlabtf-tfbackend'
+	docker-compose run --rm terraform-utils 'aws configure set role_arn arn:aws:iam::471871437096:role/gitlab_runner --profile cmdlabtf-tfbackend'
 
 .env:
 	touch .env
