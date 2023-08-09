@@ -5,7 +5,7 @@ This module is used to build pet EC2 instances. It currently supports the follow
 - Create/Attach a Security Group
 - Create/Attach an IAM Role (Only simple Action/Resource based policies are supported by Create. If you need more advanced features like Conditions you can create the role externally and attach it to the instance)
 - Create/Attach an Elastic IP
-- Create/Attach an EC2 KeyPair (Private Key is stored in SSM)
+- Create/Attach an EC2 KeyPair (Private Key is stored in SSM Paramater Store)
 - AutoRecovery Cloudwatch Alarms with SNS support
 - Tags
 
@@ -54,7 +54,7 @@ The tags merge in the following order. The right most value is what is used when
 
 The following requirements are needed by this module:
 
-- terraform (>= 0.14.6)
+- terraform (>= 1.3.0)
 
 - aws (>= 3.75.0)
 

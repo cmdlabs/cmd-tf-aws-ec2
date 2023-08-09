@@ -1,5 +1,5 @@
 module "ec2_instance" {
-  source = "github.com/cmdlabs/cmd-tf-aws-ec2?ref=0.8.2"
+  source = "github.com/cmdlabs/cmd-tf-aws-ec2?ref=0.9.2"
 
   instance_name = "instance-1"
   ami_id        = "ami-088ff0e3bde7b3fdf"
@@ -44,7 +44,10 @@ module "ec2_instance" {
       resources = ["*"]
     }
   ]
-  iam_policy_attachment = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
+  iam_policy_attachment = [
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
+  ]
 
   tags = {
     Repository = ""
